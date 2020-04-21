@@ -5,7 +5,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import HTMLView from 'react-native-htmlview';
 import BaseItem from './BaseItem';
 
-export default class TrendingItem extends Component{
+export default class TrendingItem extends BaseItem{
     render(){
         const {projectModel}=this.props;
         const {item} = projectModel;
@@ -13,17 +13,15 @@ export default class TrendingItem extends Component{
         let favoriteButton =
             <TouchableOpacity
                 style={{padding: 6}}
-                onPress={()=>{
-
-                }}
-                underlayColor={'transparent'}
-            >
+                underlayColor='transparent'
+                onPress={() => this.onPressFavorite()}>
                 <FontAwesome
-                    name={'star-o'}
+                    name={this.state.isFavorite ? 'star' : 'star-o'}
                     size={26}
-                    style={{color:'red'}}
+                    style={{color: '#678'}}
                 />
             </TouchableOpacity>
+
         let description = '<p>' + item.description + '<p/>';
         return (
             <TouchableOpacity
