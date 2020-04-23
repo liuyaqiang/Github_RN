@@ -18,7 +18,7 @@ import FavoriteUtil from '../util/FavoriteUtil';
 const URL = 'https://api.github.com/search/repositories?q=' ;
 const QUERY_STR = '&sort=stars';
 const THEME_COLOR = '#678';
-let favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_pupular);
+let favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);
 export default class PopularPage extends Component {
     constructor(props) {
         super(props);
@@ -116,12 +116,14 @@ class PopularTab extends Component{
         const  item =data.item;
         return <PopularItem
             projectModel={item}
-            onSelect={()=>{
+            onSelect={(callback)=>{
                 NavigationUtil.goPage({
-                    projectModel:item.item
+                    projectModel:item,
+                    flag:FLAG_STORAGE.flag_popular,
+                    callback,
                 },'DetailPage')
             }}
-            onFavorite={(item,isFavorite)=>FavoriteUtil.onFavorite(favoriteDao,item,isFavorite,FLAG_STORAGE.flag_pupular)}
+            onFavorite={(item,isFavorite)=>FavoriteUtil.onFavorite(favoriteDao,item,isFavorite,FLAG_STORAGE.flag_popular)}
         />
     }
     genIndicator(){

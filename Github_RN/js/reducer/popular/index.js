@@ -1,10 +1,10 @@
-import types from '../../action/types';
+import Types from '../../action/Types';
 const defaultState={
 };
 
 export default function onAction(state=defaultState,action) {
     switch (action.type) {
-        case types.POPULAR_REFRESH_SUCCESS:
+        case Types.POPULAR_REFRESH_SUCCESS:
             return {
                 ...state,
                 [action.storeName]: {
@@ -16,7 +16,7 @@ export default function onAction(state=defaultState,action) {
                     pageIndex:action.pageIndex,
                 },
             };
-        case types.POPULAR_REFRESH:
+        case Types.POPULAR_REFRESH:
             return {
                 ...state,
                 [action.storeName]: {
@@ -26,7 +26,7 @@ export default function onAction(state=defaultState,action) {
                     pageIndex:action.pageIndex,
                 },
             };
-        case types.POPULAR_REFRESH_FAIL:
+        case Types.POPULAR_REFRESH_FAIL:
             return {
                 ...state,
                 [action.storeName]: {
@@ -36,7 +36,7 @@ export default function onAction(state=defaultState,action) {
 
                 },
             };
-        case types.POPULAR_LOAD_MORE_SUCCESS:
+        case Types.POPULAR_LOAD_MORE_SUCCESS:
             return {
                 ...state,
                 [action.storeName]: {
@@ -47,7 +47,7 @@ export default function onAction(state=defaultState,action) {
                     pageIndex:action.pageIndex,
                 },
             };
-        case types.POPULAR_LOAD_MORE_FAIL:
+        case Types.POPULAR_LOAD_MORE_FAIL:
             return {
                 ...state,
                 [action.storeName]: {

@@ -1,14 +1,14 @@
-import types from '../types';
+import types from '../Types';
 import DataStore, {FLAG_STORAGE} from '../../expand/dao/DataStore';
 import {_projectModels, handleData} from '../ActionUtil';
 
 export function onLoadPupularData(storeName,url,pageSize,favoriteDao){
-    return dipatch=>{
-        dipatch({type:types.POPULAR_REFRESH,storeName:storeName});
+    return dispatch=>{
+        dispatch({type:types.POPULAR_REFRESH,storeName:storeName});
         let dataStore = new  DataStore();
-        dataStore.fetchData(url,FLAG_STORAGE.flag_pupular)
+        dataStore.fetchData(url,FLAG_STORAGE.flag_popular)
             .then(data=>{
-                handleData(types.POPULAR_REFRESH_SUCCESS,dipatch,storeName,data,pageSize,favoriteDao)
+                handleData(types.POPULAR_REFRESH_SUCCESS,dispatch,storeName,data,pageSize,favoriteDao)
             })
             .catch(error=>{
                 console.log(error);

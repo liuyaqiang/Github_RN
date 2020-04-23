@@ -1,4 +1,4 @@
-import types from '../../action/types';
+import types from '../../action/Types';
 const defaultState={
     theme:'red',
 };
