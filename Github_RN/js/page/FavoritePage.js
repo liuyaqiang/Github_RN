@@ -10,13 +10,14 @@ import {onLoadPupularData} from '../action/popluar';
 import {onLoadFavotire} from '../action/favorite';
 import PopularItem from '../common/PopularItem';
 import TrendingItem from '../common/TrendingItem';
-
 import Toast from 'react-native-easy-toast';
 import NavigationBar from '../common/NavigationBar';
 import {DeviceInfo} from 'react-native';
 import FavoriteDao from '../expand/dao/FavoriteDao';
 import {FLAG_STORAGE} from '../expand/dao/DataStore';
 import FavoriteUtil from '../util/FavoriteUtil';
+import EventBus from 'react-native-event-bus'
+import EventTypes from "../util/EventTypes";
 
 const QUERY_STR = '&sort=stars';
 const THEME_COLOR = '#678';
@@ -80,10 +81,21 @@ class FavoriteTab extends Component{
         super(props);
         const {flag} = this.props;
         this.storeName = flag;
+        this.favoriteDao = new FavoriteDao(flag);
+
     }
     componentDidMount(): void {
         this.loadData();
+        EventBus.getInstance().addListener(EventTypes.bottom_tab_select,this.listener = (data)=>{
+            if (data.to===2){
+                this.loadData(false);
+            }
+        })
     }
+    componentWillUnmount(): void {
+        EventBus.getInstance().removeListeners(this.listener);
+    }
+
     loadData(isShowLoading){
         const {onLoadFavoriteData}=this.props;
         onLoadFavoriteData(this.storeName,isShowLoading);
@@ -100,7 +112,14 @@ class FavoriteTab extends Component{
         }
         return store;
     }
-
+    onFavorite(item, isFavorite) {
+        FavoriteUtil.onFavorite(this.favoriteDao, item, isFavorite, this.props.flag);
+        if (this.storeName === FLAG_STORAGE.flag_popular) {
+            EventBus.getInstance().fireEvent(EventTypes.favorite_changed_popular);
+        } else {
+            EventBus.getInstance().fireEvent(EventTypes.favoriteChanged_trending);
+        }
+    }
     renderItem(data) {
         const {theme} = this.props;
         const item = data.item;
