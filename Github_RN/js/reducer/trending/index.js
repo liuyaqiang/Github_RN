@@ -1,10 +1,10 @@
-import types from '../../action/Types';
+import Types from '../../action/Types';
 const defaultState={
 };
 
 export default function onAction(state=defaultState,action) {
     switch (action.type) {
-        case types.TRENDING_REFRESH_SUCCESS:
+        case Types.TRENDING_REFRESH_SUCCESS:
             return {
                 ...state,
                 [action.storeName]: {
@@ -16,7 +16,7 @@ export default function onAction(state=defaultState,action) {
                     pageIndex:action.pageIndex,
                 },
             };
-        case types.TRENDING_REFRESH:
+        case Types.TRENDING_REFRESH:
             return {
                 ...state,
                 [action.storeName]: {
@@ -26,7 +26,7 @@ export default function onAction(state=defaultState,action) {
                     pageIndex:action.pageIndex,
                 },
             };
-        case types.TRENDING_REFRESH_FAIL:
+        case Types.TRENDING_REFRESH_FAIL:
             return {
                 ...state,
                 [action.storeName]: {
@@ -36,7 +36,7 @@ export default function onAction(state=defaultState,action) {
 
                 },
             };
-        case types.TRENDING_LOAD_MORE_SUCCESS:
+        case Types.TRENDING_LOAD_MORE_SUCCESS:
             return {
                 ...state,
                 [action.storeName]: {
@@ -47,7 +47,7 @@ export default function onAction(state=defaultState,action) {
                     pageIndex:action.pageIndex,
                 },
             };
-        case types.TRENDING_LOAD_MORE_FAIL:
+        case Types.TRENDING_LOAD_MORE_FAIL:
             return {
                 ...state,
                 [action.storeName]: {
@@ -55,6 +55,14 @@ export default function onAction(state=defaultState,action) {
                     hideLoadingMore: true,
                     isLoading: false,
                     pageIndex:action.pageIndex,
+                },
+            };
+        case Types.TRENDING_FLUSH_FAVORITE:
+            return {
+                ...state,
+                [action.storeName]: {
+                    ...state[action.storeName],
+                    projectModels:action.projectModels,
                 },
             };
         default:

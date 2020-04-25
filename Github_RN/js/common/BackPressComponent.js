@@ -16,6 +16,7 @@ export default class BackPressComponent {
 
     componentWillUnmount() {
         if (this.props.backPress) BackHandler.removeEventListener('hardwareBackPress', this._hardwareBackPress);
+
     }
 
     onHardwareBackPress(e) {

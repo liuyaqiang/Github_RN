@@ -16,6 +16,8 @@ import FavoriteDao from '../expand/dao/FavoriteDao';
 import {FLAG_STORAGE} from '../expand/dao/DataStore';
 import FavoriteUtil from '../util/FavoriteUtil';
 import PopularItem from '../common/PopularItem';
+import EventTypes from "../util/EventTypes";
+import EventBus from 'react-native-event-bus';
 
 const URL = 'https://github.com/trending/' ;
 const QUERY_STR = '&sort=stars';
@@ -131,24 +133,30 @@ class TrendingTab extends Component{
     }
     componentDidMount(): void {
         this.loadData();
-        this.timeSpanChangeListener = DeviceEventEmitter.addListener(EVENT_TYPE_TIME_SPAN_CHANGE,(timeSpan)=>{
-           this.timeSpan = timeSpan;
-           this.loadData();
+        EventBus.getInstance().addListener(EventTypes.favoriteChanged_trending,this.isFavoriteChangeListener = ()=>{
+            this.isFavoriteChange = true;
+        });
+        EventBus.getInstance().addListener(EventTypes.bottom_tab_select,this.isBottomTabSelectListener = (data)=>{
+            if (data.to === 1 && this.isFavoriteChange){
+                this.loadData(null,true);
+            }
         });
     }
     componentWillUnmount(): void {
-        if (this.timeSpanChangeListener){
-            this.timeSpanChangeListener.remove();
-        }
+        EventBus.getInstance().removeListeners(this.isFavoriteChangeListener);
+        EventBus.getInstance().removeListeners(this.isBottomTabSelectListener);
+
     }
-    loadData(loadMore){
-        const {onLoadTrendingData,onLoadMoreTrendingData}=this.props;
+    loadData(loadMore,refreshFavorite){
+        const {onLoadTrendingData,onLoadMoreTrendingData,onFlushTrendingFavorite}=this.props;
         const store=this._store();
         const url=this.genFetchUrl(this.storeName);
         if (loadMore){
             onLoadMoreTrendingData(this.storeName,++store.pageIndex,pageSize,store.items,favoriteDao,callback=>{
                 this.refs.toast.show("没有更多");
             })
+        }else if(refreshFavorite){
+            onFlushTrendingFavorite(this.storeName,store.pageIndex,pageSize,store.items,favoriteDao);
         }else {
             onLoadTrendingData(this.storeName,url,pageSize,favoriteDao);
         }
@@ -245,6 +253,8 @@ const mapStateToProps= state=> ({
 const mapDispatchToProps= dispatch =>({
     onLoadTrendingData:(storeName,url,pageSize,favoriteDao)=>dispatch(actions.onLoadTrendingData(storeName,url,pageSize,favoriteDao)),
     onLoadMoreTrendingData:(storeName,pageInex,pageSize,items,favoriteDao,callBack)=>dispatch(actions.onLoadMoreTrendingData(storeName,pageInex,pageSize,items,favoriteDao,callBack)),
+    onFlushTrendingFavorite:(storeName,pageInex,pageSize,items,favoriteDao)=>dispatch(actions.onFlushTrendingFavorite(storeName,pageInex,pageSize,items,favoriteDao)),
+
 });
 const TrendingTabPage=connect(mapStateToProps,mapDispatchToProps)(TrendingTab)
 

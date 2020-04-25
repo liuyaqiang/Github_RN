@@ -3,9 +3,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 import WelcomePage from '../page/WelcomePage';
 import HomePage from '../page/HomePage';
 import DetailPage from '../page/DetailPage';
-import FetchDemoPage from '../page/FetchDemoPage';
-import AysncStorageDemoPage from '../page/AsyncStorageDemoPage';
-import DataStoreDemoPage from '../page/DataStoreDemoPage';
+import WebViewPage from '../page/WebViewPage';
 const InitNavigator=createStackNavigator(
     {
         WelcomePage:{
@@ -30,17 +28,11 @@ const MainNavigator=createStackNavigator(
                 header:null,
             },
         },
-        FetchDemoPage: {
-            screen: FetchDemoPage,
-
-        },
-        AysncStorageDemoPage: {
-            screen: AysncStorageDemoPage,
-
-        },
-        DataStoreDemoPage: {
-            screen: DataStoreDemoPage,
-
+        WebViewPage: {
+            screen: WebViewPage,
+            navigationOptions:{
+                header:null,
+            },
         },
     },
 );
